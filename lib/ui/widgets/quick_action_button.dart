@@ -52,8 +52,8 @@ class QuickActionButton extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style:
-                    AppText.button(ur, color: fg).copyWith(height: 1.35),
+                style: AppText.button(ur, color: fg)
+                    .copyWith(height: 1.35, fontSize: 13),
               ),
             ],
           ),

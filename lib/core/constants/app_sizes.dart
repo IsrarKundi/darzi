@@ -30,7 +30,7 @@ class AppSizes {
 
   // Control heights
   static const double buttonHeight = 48.0;
-  static const double actionHeight = 64.0;
+  static const double actionHeight = 76.0;
   static const double rowMinHeight = 72.0;
   static const double inputHeight = 52.0;
   static const double iconBox = 46.0;

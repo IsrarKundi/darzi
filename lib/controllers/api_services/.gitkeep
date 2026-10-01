@@ -1,0 +1,3 @@
+API service classes will live here once the backend exists.
+Controllers in ../getx/ will call these services; screens stay dumb.
+(Placeholder so the folder structure is committed.)

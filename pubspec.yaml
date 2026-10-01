@@ -11,7 +11,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  shared_preferences: ^2.3.3
+  get: ^4.6.6
+  get_storage: ^2.1.1
   google_fonts: ^6.2.1
   cupertino_icons: ^1.0.8
 
@@ -22,4 +23,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-

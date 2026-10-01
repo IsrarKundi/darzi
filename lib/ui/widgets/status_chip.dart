@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/getx/language_controller.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_text.dart';
@@ -14,6 +15,7 @@ class StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ur = Get.find<LanguageController>().isUrdu;
     late final String label;
     late final Color color;
     late final Color bg;
@@ -54,7 +56,7 @@ class StatusChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSizes.pill),
       ),
       child: Text(label,
-          style: AppText.caption(false, color: color)
+          style: AppText.caption(ur, color: color)
               .copyWith(fontWeight: FontWeight.w700)),
     );
   }

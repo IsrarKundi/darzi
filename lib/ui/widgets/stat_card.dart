@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../controllers/getx/language_controller.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/app_text.dart';
@@ -21,6 +23,7 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ur = Get.find<LanguageController>().isUrdu;
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(
@@ -45,14 +48,14 @@ class StatCard extends StatelessWidget {
               ),
               child: Text(
                 value,
-                style: AppText.money(false, color: accent).copyWith(fontSize: 15),
+                style: AppText.money(ur, color: accent).copyWith(fontSize: 15),
               ),
             ),
             const SizedBox(height: AppSizes.gapSm),
             Text(
               label,
               textAlign: TextAlign.center,
-              style: AppText.caption(false).copyWith(height: 1.4),
+              style: AppText.caption(ur).copyWith(height: 1.4),
             ),
           ],
         ),

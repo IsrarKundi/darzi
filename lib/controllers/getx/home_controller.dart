@@ -115,6 +115,18 @@ class HomeController extends GetxController {
       .where((b) => b.isWorkStatus && (b.id == 'b2' || b.id == 'b4'))
       .toList();
 
+  /// All orders still being worked on (cutting/stitching/trial).
+  List<Booking> get inProgressOrders =>
+      bookings.where((b) => b.isWorkStatus).toList();
+
+  /// Finished and handed over.
+  List<Booking> get deliveredOrders =>
+      bookings.where((b) => b.status == BookingStatus.delivered).toList();
+
+  /// Money still to collect across [orders].
+  double pendingFor(List<Booking> orders) =>
+      orders.fold(0, (sum, b) => sum + b.balance);
+
   /// Balances still owed, largest first.
   List<Booking> get pendingPayments {
     final list = bookings.where((b) => b.balance > 0).toList();

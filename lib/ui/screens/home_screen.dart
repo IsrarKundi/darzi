@@ -12,12 +12,13 @@ import '../widgets/hero_card.dart';
 import '../widgets/language_toggle_button.dart';
 import '../widgets/order_row.dart';
 import '../widgets/payment_row.dart';
-import '../widgets/quick_action_button.dart';
 import '../widgets/section_header.dart';
+import '../widgets/status_stat_card.dart';
 
-/// Home tab — the morning briefing, not a dashboard.
-/// Order: greeting → hero number → quick actions → due today →
+/// Home tab — the morning briefing + dashboard.
+/// Order: greeting → hero number → order-status cards → due today →
 /// ready for pickup → overdue → upcoming → pending payments.
+/// New Booking lives on the capsule FAB in AppShell.
 /// Dumb view; data from HomeController.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -31,8 +32,10 @@ class HomeScreen extends StatelessWidget {
     return Obx(() {
       final ur = lang.isUrdu;
       final locale = lang.localeCode;
-      final dueToday = home.dueTodayOrders;
+      final inProgress = home.inProgressOrders;
       final ready = home.readyOrders;
+      final delivered = home.deliveredOrders;
+      final dueToday = home.dueTodayOrders;
       final overdue = home.overdueOrders;
       final upcoming = home.upcomingOrders;
       final payments = home.pendingPayments;
@@ -94,23 +97,36 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSizes.gapLg),
 
-            // Primary actions, thumb-sized. One filled primary per screen.
+            // Dashboard: how much work sits in each status.
+            SectionHeader(text: 'section_status'.tr),
+            const SizedBox(height: AppSizes.gapMd),
             Row(
               children: [
-                QuickActionButton(
-                  icon: Icons.add_circle_outline,
-                  label: 'qa_new_booking'.tr,
-                  filled: true,
+                StatusStatCard(
+                  label: 'status_in_progress'.tr,
+                  count: inProgress.length,
+                  amount:
+                      "${money('rs'.tr, home.pendingFor(inProgress), locale: locale)} ${'pending'.tr}",
+                  dotColor: AppColors.warn,
+                  onTap: () => nav.goTo(1),
                 ),
                 const SizedBox(width: AppSizes.gapMd),
-                QuickActionButton(
-                  icon: Icons.payments_outlined,
-                  label: 'qa_record_payment'.tr,
+                StatusStatCard(
+                  label: 'status_ready'.tr,
+                  count: ready.length,
+                  amount:
+                      "${money('rs'.tr, home.pendingFor(ready), locale: locale)} ${'pending'.tr}",
+                  dotColor: AppColors.ok,
+                  onTap: () => nav.goTo(1),
                 ),
                 const SizedBox(width: AppSizes.gapMd),
-                QuickActionButton(
-                  icon: Icons.person_add_outlined,
-                  label: 'qa_add_customer'.tr,
+                StatusStatCard(
+                  label: 'status_delivered'.tr,
+                  count: delivered.length,
+                  amount:
+                      "${money('rs'.tr, home.pendingFor(delivered), locale: locale)} ${'pending'.tr}",
+                  dotColor: AppColors.ink500,
+                  onTap: () => nav.goTo(1),
                 ),
               ],
             ),

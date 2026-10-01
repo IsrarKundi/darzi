@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/getx/language_controller.dart';
 import '../../controllers/getx/navigation_controller.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_text.dart';
 import 'bookings_screen.dart';
 import 'customers_screen.dart';
 import 'finance_screen.dart';
@@ -27,6 +29,25 @@ class AppShell extends StatelessWidget {
     return Obx(
       () => Scaffold(
         body: IndexedStack(index: nav.tabIndex.value, children: pages),
+        // Capsule "New Booking" action — home tab only. Customer
+        // creation happens inside the booking flow, so no separate
+        // add-customer / record-payment buttons on home.
+        floatingActionButton: nav.tabIndex.value == 0
+            ? FloatingActionButton.extended(
+                onPressed: () => Get.snackbar('', 'coming_step2'.tr,
+                    snackPosition: SnackPosition.BOTTOM),
+                shape: const StadiumBorder(),
+                backgroundColor: AppColors.brand700,
+                foregroundColor: Colors.white,
+                icon: const Icon(Icons.add),
+                label: Text(
+                  'qa_new_booking'.tr,
+                  style: AppText.button(
+                      Get.find<LanguageController>().isUrdu,
+                      color: Colors.white),
+                ),
+              )
+            : null,
         // M3 NavigationBar: labels always visible (icon + text pairs —
         // icons alone are mystery-meat navigation for this audience).
         bottomNavigationBar: Container(

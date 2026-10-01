@@ -10,19 +10,30 @@ import '../../models/booking.dart';
 
 /// Compact 3-level order row (NOT a card): customer → garment/due → status.
 /// Whole row is tappable. Lives inside a section card with dividers.
+///
+/// The status chip is caller-configured so one row serves due-today,
+/// overdue, ready-for-pickup and upcoming sections. [trailing] replaces
+/// the balance amount on the right when given (e.g. a Deliver button).
 class OrderRow extends StatelessWidget {
   final Booking booking;
-  final bool overdue;
+  final String chipLabel;
+  final Color chipColor;
+  final Color chipBg;
+  final Widget? trailing;
 
-  const OrderRow({super.key, required this.booking, this.overdue = false});
+  const OrderRow({
+    super.key,
+    required this.booking,
+    required this.chipLabel,
+    required this.chipColor,
+    required this.chipBg,
+    this.trailing,
+  });
 
   @override
   Widget build(BuildContext context) {
     final lang = Get.find<LanguageController>();
     final ur = lang.isUrdu;
-    final chipColor = overdue ? AppColors.danger : AppColors.warn;
-    final chipBg = overdue ? AppColors.dangerBg : AppColors.warnBg;
-    final chipLabel = overdue ? 'chip_overdue'.tr : 'chip_due_today'.tr;
 
     return InkWell(
       onTap: () => Get.snackbar('', 'coming_step2'.tr,
@@ -75,12 +86,13 @@ class OrderRow extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppSizes.gapXs),
-                // Digits are an LTR run even in RTL — formatRs handles it.
-                Text(
-                  money('rs'.tr, booking.balance,
-                      locale: lang.localeCode),
-                  style: AppText.money(ur).copyWith(fontSize: 14),
-                ),
+                trailing ??
+                    // Digits are an LTR run even in RTL — formatRs handles it.
+                    Text(
+                      money('rs'.tr, booking.balance,
+                          locale: lang.localeCode),
+                      style: AppText.money(ur).copyWith(fontSize: 14),
+                    ),
               ],
             ),
           ],

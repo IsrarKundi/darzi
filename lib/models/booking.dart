@@ -1,5 +1,9 @@
 /// Booking model. fromJson/toJson are ready now so the future
 /// API layer can parse responses without touching this file's shape.
+///
+/// `status` and `completedDate` are mutable on purpose: the dummy
+/// frontend mutates them in-memory (e.g. mark delivered). The API
+/// phase will replace mutation with fresh objects from responses.
 
 enum BookingStatus { cutting, stitching, trial, ready, delivered }
 
@@ -7,12 +11,16 @@ class Booking {
   final String id;
   final String customerName;
   final String garment;
-  final BookingStatus status;
+  BookingStatus status;
   final String dueDate;
   final double price;
   final double advance;
 
-  const Booking({
+  /// Display label of the day the order was delivered ('Oct 2').
+  /// Null until delivered. Production: real date filtering.
+  String? completedDate;
+
+  Booking({
     required this.id,
     required this.customerName,
     required this.garment,
@@ -20,9 +28,16 @@ class Booking {
     required this.dueDate,
     required this.price,
     required this.advance,
+    this.completedDate,
   });
 
   double get balance => price - advance;
+
+  /// Still being worked on (not ready, not delivered).
+  bool get isWorkStatus =>
+      status == BookingStatus.cutting ||
+      status == BookingStatus.stitching ||
+      status == BookingStatus.trial;
 
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
         id: json['id'] as String,
@@ -35,6 +50,7 @@ class Booking {
         dueDate: json['due_date'] as String,
         price: (json['price'] as num).toDouble(),
         advance: (json['advance'] as num).toDouble(),
+        completedDate: json['completed_date'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,5 +61,6 @@ class Booking {
         'due_date': dueDate,
         'price': price,
         'advance': advance,
+        'completed_date': completedDate,
       };
 }

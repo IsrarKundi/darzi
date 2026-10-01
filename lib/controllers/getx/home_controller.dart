@@ -5,11 +5,14 @@ import '../../models/booking.dart';
 /// Home screen state. Seed data lives here (UI-only phase).
 /// Later: replace seeds with calls to an ApiService — screens stay unchanged.
 ///
-/// Seed "today" is Oct 2: b3/b5 due today, b1/b6 overdue. The curation
-/// getters below stand in for real due-date filtering until the API exists.
+/// Seed "today" is Oct 2 (see [todayLabel]). The curation getters below
+/// stand in for real due-date filtering until the API exists.
 class HomeController extends GetxController {
+  /// Display label of the seeded "today". Production: use DateTime.now().
+  static const todayLabel = 'Oct 2';
+
   final bookings = <Booking>[
-    const Booking(
+    Booking(
       id: 'b1',
       customerName: 'Ahmed Raza',
       garment: 'Shalwar Kameez',
@@ -18,7 +21,7 @@ class HomeController extends GetxController {
       price: 4500,
       advance: 2000,
     ),
-    const Booking(
+    Booking(
       id: 'b2',
       customerName: 'Bilal Hussain',
       garment: 'Waistcoat Set',
@@ -27,7 +30,7 @@ class HomeController extends GetxController {
       price: 8000,
       advance: 4000,
     ),
-    const Booking(
+    Booking(
       id: 'b3',
       customerName: 'Usman Tariq',
       garment: 'Kurta Pajama',
@@ -36,7 +39,7 @@ class HomeController extends GetxController {
       price: 3200,
       advance: 3200,
     ),
-    const Booking(
+    Booking(
       id: 'b4',
       customerName: 'Danish Ali',
       garment: 'Sherwani',
@@ -45,7 +48,7 @@ class HomeController extends GetxController {
       price: 15000,
       advance: 5000,
     ),
-    const Booking(
+    Booking(
       id: 'b5',
       customerName: 'Sajid Mehmood',
       garment: 'Kurta',
@@ -54,7 +57,7 @@ class HomeController extends GetxController {
       price: 2800,
       advance: 1000,
     ),
-    const Booking(
+    Booking(
       id: 'b6',
       customerName: 'Tariq Aziz',
       garment: 'Shalwar Kameez',
@@ -63,15 +66,54 @@ class HomeController extends GetxController {
       price: 4500,
       advance: 1500,
     ),
+    Booking(
+      id: 'b7',
+      customerName: 'Faisal Raza',
+      garment: 'Shalwar Kameez',
+      status: BookingStatus.delivered,
+      dueDate: 'Oct 1',
+      price: 5000,
+      advance: 5000,
+      completedDate: 'Oct 2',
+    ),
+    Booking(
+      id: 'b8',
+      customerName: 'Imran Sheikh',
+      garment: 'Kurta Shalwar',
+      status: BookingStatus.ready,
+      dueDate: 'Oct 3',
+      price: 3800,
+      advance: 1000,
+    ),
   ].obs;
 
-  /// Orders past their due date (seed curation; production: filter by date).
-  List<Booking> get overdueOrders =>
-      bookings.where((b) => b.id == 'b1' || b.id == 'b6').toList();
+  /// Work still in progress and due today.
+  List<Booking> get dueTodayOrders => bookings
+      .where((b) => b.isWorkStatus && b.dueDate == todayLabel)
+      .toList();
 
-  /// Orders due today (seed curation; production: filter by date).
-  List<Booking> get dueTodayOrders =>
-      bookings.where((b) => b.id == 'b3' || b.id == 'b5').toList();
+  /// Work in progress past its due date
+  /// (seed curation; production: filter by date).
+  List<Booking> get overdueOrders => bookings
+      .where((b) => b.isWorkStatus && (b.id == 'b1' || b.id == 'b6'))
+      .toList();
+
+  /// Finished suits waiting in the shop for customer pickup.
+  List<Booking> get readyOrders =>
+      bookings.where((b) => b.status == BookingStatus.ready).toList();
+
+  /// Orders handed over today.
+  List<Booking> get completedTodayOrders => bookings
+      .where((b) =>
+          b.status == BookingStatus.delivered &&
+          b.completedDate == todayLabel)
+      .toList();
+
+  /// Work in progress due after today
+  /// (seed curation; production: filter by date).
+  List<Booking> get upcomingOrders => bookings
+      .where((b) => b.isWorkStatus && (b.id == 'b2' || b.id == 'b4'))
+      .toList();
 
   /// Balances still owed, largest first.
   List<Booking> get pendingPayments {
@@ -82,4 +124,14 @@ class HomeController extends GetxController {
 
   double get toCollectTotal =>
       pendingPayments.fold(0, (sum, b) => sum + b.balance);
+
+  /// Demo action: hand the suit to the customer. Moves the order
+  /// out of "ready for pickup" and into today's completed count.
+  void markDelivered(Booking booking) {
+    booking.status = BookingStatus.delivered;
+    booking.completedDate = todayLabel;
+    bookings.refresh();
+    Get.snackbar('', 'marked_delivered'.tr,
+        snackPosition: SnackPosition.BOTTOM);
+  }
 }

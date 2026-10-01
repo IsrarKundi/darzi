@@ -47,9 +47,9 @@ class AppTheme {
           shape: const StadiumBorder(),
         ),
       ),
-      chipTheme: scheme.chipTheme.copyWith(
-        shape: const StadiumBorder(),
-        side: const BorderSide(color: AppColors.line),
+      chipTheme: const ChipThemeData(
+        shape: StadiumBorder(),
+        side: BorderSide(color: AppColors.line),
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.surface,

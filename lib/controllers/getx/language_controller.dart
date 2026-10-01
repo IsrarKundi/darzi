@@ -12,6 +12,9 @@ class LanguageController extends GetxController {
 
   bool get isUrdu => locale.value.languageCode == 'ur';
 
+  /// 'en_US' / 'ur_PK' — for intl formatters (numbers, dates).
+  String get localeCode => isUrdu ? 'ur_PK' : 'en_US';
+
   @override
   void onInit() {
     super.onInit();

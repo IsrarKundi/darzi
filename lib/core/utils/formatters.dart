@@ -1,24 +1,19 @@
-/// Pure formatting helpers. No widgets, no state.
+import 'package:intl/intl.dart';
 
-/// 4500 -> "4,500"
-String formatRs(double n) {
-  final s = n.toStringAsFixed(0);
-  final buf = StringBuffer();
-  for (int i = 0; i < s.length; i++) {
-    if (i > 0 && (s.length - i) % 3 == 0) buf.write(',');
-    buf.write(s[i]);
-  }
-  return buf.toString();
-}
+/// Pure formatting helpers. No widgets, no state.
+///
+/// Rule: never hand-roll number/date formats — everything goes through
+/// `intl` with the active locale. ur-PK defaults to European digits (0-9)
+/// per CLDR; digits always flow LTR inside RTL layouts.
+
+/// 4500 -> "4,500" (locale-aware grouping)
+String formatRs(double n, {String? locale}) =>
+    NumberFormat.decimalPattern(locale).format(n);
 
 /// "Rs 4,500" / "روپے 4,500" depending on language.
-String money(String rsLabel, double amount) => '$rsLabel ${formatRs(amount)}';
+String money(String rsLabel, double amount, {String? locale}) =>
+    '$rsLabel ${formatRs(amount, locale: locale)}';
 
-/// DateTime.now() -> "Oct 2, 2026"
-String formatDate(DateTime d) {
-  const months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  ];
-  return '${months[d.month - 1]} ${d.day}, ${d.year}';
-}
+/// DateTime -> "Oct 2, 2026" / "2 اکتوبر، 2026" depending on locale.
+String formatDate(DateTime d, String locale) =>
+    DateFormat.yMMMd(locale).format(d);

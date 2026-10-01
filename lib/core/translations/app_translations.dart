@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 /// All user-facing strings, English + Urdu. Access via `'key'.tr`.
+/// Parameterized strings use `@name` and `.trParams({...})`.
 /// Rule: no hardcoded UI strings anywhere else.
 class AppTranslations extends Translations {
   @override
@@ -14,14 +15,17 @@ class AppTranslations extends Translations {
           'nav_finance': 'Finance',
           'nav_more': 'More',
           'greeting': 'Assalam-o-Alaikum',
-          'stat_today': "Today's bookings",
-          'stat_progress': 'In progress',
-          'stat_pending': 'Pending amount',
+          'hero_due_today': 'orders due today',
+          'hero_sub': '@overdue overdue · @amount to collect',
           'qa_new_booking': 'New Booking',
           'qa_add_customer': 'Add Customer',
           'qa_record_payment': 'Record Payment',
-          'today_bookings': "Today's bookings",
+          'section_due_today': 'Due today',
+          'section_overdue': 'Overdue',
           'pending_payments': 'Pending payments',
+          'chip_overdue': 'Overdue',
+          'chip_due_today': 'Due today',
+          'see_all': 'See all',
           'remind': 'Remind',
           'due': 'Due',
           'balance': 'Balance',
@@ -44,15 +48,18 @@ class AppTranslations extends Translations {
           'nav_finance': 'حساب کتاب',
           'nav_more': 'مزید',
           'greeting': 'السلام علیکم',
-          'stat_today': 'آج کی بکنگیں',
-          'stat_progress': 'جاری کام',
-          'stat_pending': 'واجب الادا رقم',
+          'hero_due_today': 'آج ڈیو آرڈرز',
+          'hero_sub': '@overdue لیٹ · @amount وصولی باقی',
           'qa_new_booking': 'نئی بکنگ',
           'qa_add_customer': 'نیا گاہک',
           'qa_record_payment': 'ادائیگی',
-          'today_bookings': 'آج کی بکنگیں',
+          'section_due_today': 'آج ڈیو',
+          'section_overdue': 'لیٹ آرڈرز',
           'pending_payments': 'واجب الادا ادائیگیاں',
-          'remind': 'یاد دہانی',
+          'chip_overdue': 'لیٹ',
+          'chip_due_today': 'آج ڈیو',
+          'see_all': 'سب دیکھیں',
+          'remind': 'یاد دلائیں',
           'due': 'تاریخ',
           'balance': 'بقایا',
           'advance': 'ایڈوانس',

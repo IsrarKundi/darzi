@@ -45,6 +45,11 @@ class AppText {
   static TextStyle money(bool ur, {Color color = AppColors.ink900}) =>
       _ui(ur, 15, FontWeight.w700, color, 1.4);
 
+  /// Big hero number (e.g. "2" orders due today). Uses the body font even in
+  /// Urdu — digits are LTR runs and look wrong in Nastaliq.
+  static TextStyle hero(bool ur) =>
+      _ui(ur, 46, FontWeight.w800, AppColors.ink900, 1.15);
+
   static TextStyle _ui(bool ur, double size, FontWeight weight, Color color, double height) {
     return ur
         ? GoogleFonts.notoSansArabic(

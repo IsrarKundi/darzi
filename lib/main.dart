@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'controllers/getx/language_controller.dart';
 import 'controllers/getx/navigation_controller.dart';
@@ -14,6 +15,8 @@ import 'ui/screens/app_shell.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  // Locale date symbols (e.g. Urdu month names) for intl DateFormat.
+  await initializeDateFormatting();
   Get.put(LanguageController());
   Get.put(NavigationController());
   runApp(const DarziApp());
